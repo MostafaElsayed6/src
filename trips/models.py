@@ -16,7 +16,16 @@ class UserInput(models.Model):
         return f"{self.name} - {self.trip_name}"
 
 ###################################################################################################
+class Category(models.Model):
+    name = models.CharField(max_length=100, verbose_name="اسم التصنيف")
+    image = models.ImageField(upload_to='category_images/', verbose_name="صورة التصنيف")
+
+    def __str__(self):
+        return self.name
+
 class Trip(models.Model):
+    
+    category = models.ForeignKey(Category, on_delete=models.CASCADE, related_name='products')
     title = models.CharField(max_length=200, verbose_name="عنوان الرحلة")
     location = models.CharField(max_length=200, verbose_name="موقع الرحلة", default="Default Location")
     responsible_phone = models.CharField(max_length=20, verbose_name="هاتف المسؤول")
@@ -28,7 +37,7 @@ class Trip(models.Model):
     date = models.DateTimeField(verbose_name="تاريخ الرحلة")
     actve = models.BooleanField(default=True, verbose_name="مفعل")  # يُستخدم لتح
     # participants = models.ManyToManyField('userInput', related_name='trips', blank=True, verbose_name="المشاركون")
-
+   
     def __str__(self):
         return self.title
     

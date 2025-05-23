@@ -2,7 +2,7 @@
 from django.http import HttpResponse
 from django.views.decorators.csrf import csrf_exempt
 from django.shortcuts import render, get_object_or_404,redirect
-from.models import Trip ,UserInput
+from.models import Trip ,UserInput ,Category
 
 
 # from django.contrib import messages
@@ -106,8 +106,24 @@ def trips_list_view(request):
 #######################################################################################
 
 def index(request):
-    trips = Trip.objects.all().order_by('-date') # أحدث 3 رحلات للصفحة الرئيسية
-    return render(request,'trips/home.html', {'trips':trips})
+    trips = Trip.objects.all().order_by('-date')  # أحدث 3 رحلات للصفحة الرئيسية
+    categories = Category.objects.all()  # جميع التصنيفات
+
+    return render(request, 'trips/home.html', {
+        'trips': trips,
+        'categories': categories
+    })
+
+def trips_by_category(request, category_id):
+    # جلب التصنيف المطلوب
+    category = get_object_or_404(Category, id=category_id)
+    # جلب الرحلات المرتبطة بهذا التصنيف
+    trips = Trip.objects.filter(category=category).order_by('-date')
+
+    return render(request, 'trips/trips_by_category.html', {
+        'category': category,
+        'trips': trips
+    })
 
 def trips_list(request):
     all_trips = Trip.objects.all().order_by('-date')

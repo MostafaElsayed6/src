@@ -1,6 +1,6 @@
 # في ملف trips/admin.py
 from django.contrib import admin
-from .models import Trip,UserInput
+from .models import Trip,UserInput,Category
 # from .models import Booking
 # from .models import UserInput
 
@@ -10,6 +10,12 @@ class TripAdmin(admin.ModelAdmin):
     list_display = ('title', 'price', 'date', 'capacity')
     search_fields = ('title', 'description')
     list_filter = ('date',)
+    
+@admin.register(Category)
+class CategoryAdmin(admin.ModelAdmin):
+    list_display = ['name']
+    search_fields = ['name']
+    list_filter = ['name']  
 
 
 admin.site.register(UserInput)
